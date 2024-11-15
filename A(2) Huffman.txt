@@ -1,0 +1,194 @@
+
+A(2) Write a program to implement Huffman Encoding using a greedy strategy.
+Java Code:
+package com.daa;
+import java.util.PriorityQueue;
+
+class HuffmanNode {
+	char character;
+    int frequency;
+    HuffmanNode left, right;
+
+    // Constructor
+    HuffmanNode(char character, int frequency) {
+        this.character = character;
+        this.frequency = frequency;
+        left = right = null;
+    }
+    }
+
+    // Huffman Encoding class
+    public class HuffmanEncoding {
+
+        // Function to build the Huffman Tree
+        public HuffmanNode buildHuffmanTree(char[] characters, int[] frequencies) {
+            // Create a priority queue (min-heap)
+            PriorityQueue<HuffmanNode> pq = new PriorityQueue<>((a, b) -> a.frequency - b.frequency);
+
+            // Add all characters and their frequencies as nodes to the priority queue
+            for (int i = 0; i < characters.length; i++) {
+                pq.add(new HuffmanNode(characters[i], frequencies[i]));
+            }
+
+            // Build the Huffman Tree
+            while (pq.size() > 1) {
+                // Remove the two nodes with the smallest frequency
+            	HuffmanNode left = pq.poll();
+            	HuffmanNode right = pq.poll();
+
+                // Create a new internal node with a combined frequency
+            	HuffmanNode newNode = new HuffmanNode('\0', left.frequency + right.frequency);
+                newNode.left = left;
+                newNode.right = right;
+
+                // Add the internal node back to the priority queue
+                pq.add(newNode);
+            }
+
+            // The remaining node is the root of the Huffman Tree
+            return pq.peek();
+        }
+
+        // Function to generate Huffman Codes
+        public void generateHuffmanCodes(HuffmanNode root, String code) {
+            // Base case: If the node is a leaf node, print the code
+            if (root == null)
+                return;
+
+            if (root.left == null && root.right == null) {
+                System.out.println(root.character + ": " + code);
+                return;
+            }
+
+            // Traverse left and right subtrees, appending '0' and '1' to the code
+            generateHuffmanCodes(root.left, code + "0");
+            generateHuffmanCodes(root.right, code + "1");
+        }
+
+        public static void main(String[] args) {
+            // Example input
+            char[] characters = {'a', 'b', 'c', 'd', 'e', 'f'};
+            int[] frequencies = {5, 9, 12, 13, 16, 45};
+
+            HuffmanEncoding huffman = new HuffmanEncoding();
+
+            // Build the Huffman Tree
+            HuffmanNode root = huffman.buildHuffmanTree(characters, frequencies);
+
+            // Generate Huffman Codes
+            System.out.println("Huffman Codes:");
+            huffman.generateHuffmanCodes(root, "");
+        }
+    }
+
+Time and Space Complexity:
+Time Complexity
+The time complexity of the Huffman Encoding algorithm primarily depends on two main operations:
+1.	Building the Huffman Tree
+2.	Generating the Huffman Codes
+1. Building the Huffman Tree
+The process of building the Huffman tree involves repeatedly picking the two nodes with the smallest frequencies and merging them into a new internal node, until only one node remains.
+•	Step 1: Insertion of nodes into the Priority Queue
+o	Initially, you insert each character (along with its frequency) into a priority queue (min-heap).
+o	Inserting an element into a priority queue (min-heap) takes O(log n) where n is the number of characters.
+o	Inserting all n characters requires O(n log n).
+•	Step 2: Building the Tree
+o	Each time we pick two nodes with the smallest frequencies and merge them into a new node, the priority queue is updated.
+o	This operation involves:
+	Removing two nodes from the queue, which each takes O(log n).
+	Creating a new internal node (which takes O(1).
+	Inserting the new node back into the queue, which takes O(log n)
+o	These operations are repeated for each of the n−1n-1n−1 merging steps (since every time we merge two nodes, we reduce the number of nodes by one).
+o	Thus, each merge operation costs O(log n) and we perform this n−1n-1n−1 times.
+o	Therefore, the total time complexity for building the tree is O(nlog n)
+2. Generating the Huffman Codes
+After building the Huffman Tree, we need to generate the Huffman codes by traversing the tree. The traversal is done by visiting each node and assigning '0' or '1' to the edges depending on whether we go left or right.
+•	The depth of the tree is proportional to O(log n) in the worst case (when the tree is balanced).
+•	We traverse each node in the tree once, and since the tree contains n nodes, the traversal takes O(n).
+•	Each node in the tree is visited once during the traversal, so the time complexity for generating the Huffman codes is O(n).
+Total Time Complexity
+•	Building the tree: O(n log n)
+•	Generating the Huffman codes: O(n)
+Thus, the overall time complexity of the Huffman Encoding algorithm is:
+O(n log n)
+This is because the dominating term is O(n log n) and the O(n) term is smaller.
+
+Questions:
+1. What is Huffman Encoding?
+Answer: Huffman Encoding is a lossless data compression algorithm that uses variable-length codes to represent characters. Characters with higher frequencies are given shorter codes, and characters with lower frequencies are given longer codes. This approach minimizes the total number of bits required to represent the data.
+
+2. How does the greedy strategy work in Huffman Encoding?
+Answer: The greedy strategy in Huffman Encoding works by always choosing the two nodes with the smallest frequencies to merge them into a new node. This process is repeated until only one node remains, which becomes the root of the Huffman tree. The tree is constructed from bottom-up, ensuring that characters with higher frequencies are closer to the root and have shorter codes.
+
+3. Explain the steps of the Huffman Encoding algorithm.
+Answer: The Huffman Encoding algorithm follows these steps:
+
+Create a priority queue (min-heap): Add all the characters along with their frequencies to the priority queue.
+Build the Huffman Tree:
+Remove the two nodes with the smallest frequencies from the queue.
+Create a new internal node with these two nodes as children. The frequency of the new node is the sum of the two frequencies.
+Insert this new node back into the priority queue.
+Repeat until only one node remains.
+Generate Huffman Codes: Traverse the Huffman tree. Assign '0' for left edges and '1' for right edges. The code for each character is the path from the root to that character.
+4. What is the time complexity of the Huffman Encoding algorithm?
+Answer:
+Time Complexity:
+•	Building the Huffman Tree: Each insertion and deletion in the priority queue (min-heap) takes O(log n) time, where n is the number of nodes (characters).
+•	Constructing the tree involves n−1n-1n−1 iterations (since you combine two nodes each time), so the total time complexity is O(nlog⁡n)
+Space Complexity:
+•	The space complexity is O(n), as we need to store the characters and their corresponding frequencies, as well as the nodes in the Huffman tree.
+
+5. Can you explain how the frequency table is built in the program?
+Answer: In the Huffman Encoding algorithm, the frequency table is typically given as input, where each character and its frequency are provided. The program uses this frequency table to create nodes that are inserted into a priority queue. The priority queue is ordered by frequency, and the nodes with the smallest frequencies are combined to form the Huffman tree.
+
+6. What are the practical applications of Huffman Encoding?
+Answer: Huffman Encoding is widely used in:
+
+File Compression: Formats like ZIP and GZIP use Huffman Encoding for compressing files.
+Image Compression: JPEG uses Huffman Encoding to compress images.
+Data Transmission: It is used in various communication protocols to compress data for faster transmission.
+7. What will be the structure of the output when Huffman codes are generated?
+Answer: The output will consist of the characters and their corresponding Huffman codes. For example:
+Copy code
+Huffman Codes:
+a: 000
+b: 001
+c: 01
+d: 10
+e: 11
+f: 111
+This represents the binary encoding for each character based on the frequency of occurrence.
+
+8. What is the advantage of Huffman Encoding over other compression techniques?
+Answer: Huffman Encoding provides an efficient, lossless compression by assigning shorter codes to more frequent characters. This reduces the average number of bits needed for encoding the data, making it more space-efficient. Unlike algorithms like Run-Length Encoding, Huffman Encoding adapts to the frequency of characters, making it effective for a wider range of data types.
+
+9. How would you handle edge cases in Huffman Encoding?
+Answer: Edge cases that might arise in Huffman Encoding include:
+
+Single character input: If only one character is given, its code should be '0' or '1'.
+Equal frequency for all characters: If all characters have the same frequency, the resulting Huffman codes would still be valid, but the tree may not be as optimized as it could be for skewed frequency distributions.
+Empty input: If there are no characters, the program should handle it gracefully without any errors.
+10. What happens if the frequencies of characters are not sorted before building the Huffman tree?
+Answer: Sorting the characters by frequency ensures that the nodes with the smallest frequencies are combined first, following the greedy approach. If the nodes are not sorted, the algorithm might not correctly implement the greedy strategy and could lead to suboptimal or incorrect codes.
+
+11. How does the program ensure that the smallest frequencies are chosen for merging?
+Answer: The program uses a priority queue (min-heap) to always pick the nodes with the smallest frequencies. The priority queue automatically orders the nodes by their frequency, so the two nodes with the smallest frequencies are always available for merging at the top of the heap.
+
+12. Write the recursive function for generating Huffman codes.
+Answer:
+
+java
+Copy code
+public void generateHuffmanCodes(HuffmanNode root, String code) {
+    if (root == null) {
+        return;
+    }
+    if (root.left == null && root.right == null) {
+        System.out.println(root.character + ": " + code);
+        return;
+    }
+    generateHuffmanCodes(root.left, code + "0");
+    generateHuffmanCodes(root.right, code + "1");
+}
+13. Explain the role of the PriorityQueue in Huffman Encoding.
+Answer: A PriorityQueue (min-heap) is used to always retrieve and combine the two nodes with the smallest frequencies. The priority queue keeps the nodes sorted by frequency, ensuring that we can merge the least frequent nodes first, which is the key part of the greedy strategy in Huffman Encoding.

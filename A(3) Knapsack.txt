@@ -1,0 +1,101 @@
+A(3) Write a program to solve a fractional Knapsack problem using a greedy method
+
+Java Code:
+public class Item {
+
+	int value, weight;
+
+    // Constructor to initialize value and weight
+    public Item(int value, int weight) {
+        this.value = value;
+        this.weight = weight;
+    }
+}
+import java.util.Arrays;
+
+public class FractionalKnapsack {
+
+	// Function to calculate the maximum value we can get
+    public double getMaxValue(Item[] items, int capacity) {
+        // Sort items by their value/weight ratio in descending order
+        Arrays.sort(items, (a, b) -> Double.compare((double) b.value / b.weight, (double) a.value / a.weight));
+
+        double totalValue = 0; // To store the maximum value
+        for (Item item : items) {
+            if (capacity == 0) {
+                break; // No more capacity in the knapsack
+            }
+            
+            // If item can be fully taken in the knapsack
+            if (item.weight <= capacity) {
+                capacity -= item.weight;
+                totalValue += item.value;
+            } else {
+                // Take the fraction of the item that fits
+                totalValue += item.value * ((double) capacity / item.weight);
+                capacity = 0; // Knapsack is full
+            }
+        }
+        return totalValue;
+    }
+
+    public static void main(String[] args) {
+        FractionalKnapsack knapsack = new FractionalKnapsack();
+        
+        // Example items with value and weight
+        Item[] items = {
+            new Item(60, 10), // value 60, weight 10
+            new Item(100, 20), // value 100, weight 20
+            new Item(120, 30)  // value 120, weight 30
+        };
+
+        int capacity = 50; // Knapsack capacity
+
+        // Calculate and print the maximum value that can be obtained
+        double maxValue = knapsack.getMaxValue(items, capacity);
+        System.out.println("Maximum value in the Knapsack = " + maxValue);
+    }
+}
+Explanation:
+Time Complexity:
+•	Sorting the items: Sorting the items based on their value-to-weight ratio takes O(n log n), where nnn is the number of items.
+•	Iterating through the items: After sorting, we iterate through the items once, which takes O(n).
+•	Therefore, the total time complexity is O(n log n).
+Space Complexity:
+•	The space complexity is O(n)  due to the array of items and the temporary space used for sorting.
+•	Therefore, the space complexity is O(n)).
+
+Types of Questions that can be Asked in a Practical Exam:
+1. Explanation of the Algorithm:
+•	Q: How does the greedy approach solve the fractional knapsack problem?
+•	A: The greedy approach solves the fractional knapsack problem by selecting items based on their value-to-weight ratio. The item with the highest ratio is selected first. If the item can be fully added to the knapsack, it is added completely. If not, the fraction of the item that fits into the remaining capacity is added.
+2. Time Complexity Analysis:
+•	Q: What is the time complexity of your algorithm and why?
+•	A: The time complexity is O(nlog⁡n)O(n \log n)O(nlogn), where nnn is the number of items. This is due to the sorting of items based on the value-to-weight ratio. After sorting, we iterate through the items once, which takes O(n)O(n)O(n), but the sorting step dominates the complexity.
+3. Space Complexity Analysis:
+•	Q: What is the space complexity of your solution?
+•	A: The space complexity is O(n)O(n)O(n), which is primarily due to the storage required for the array of items and the space used for sorting.
+4. Edge Cases and Validation:
+•	Q: How would you handle cases where the capacity of the knapsack is less than the smallest item weight or when no items are provided?
+•	A: If the knapsack capacity is less than the smallest item weight, the algorithm will not add that item, as its weight exceeds the remaining capacity. If no items are provided, the algorithm should return 0 because the knapsack cannot hold anything.
+5. Modifying the Problem:
+•	Q: How would you modify your program to handle the 0/1 Knapsack problem where items cannot be broken into fractions?
+•	A: The greedy approach is not suitable for the 0/1 knapsack problem. For the 0/1 knapsack, we would use dynamic programming to find the optimal solution, as items must either be completely included or excluded.
+6. Practical Use Cases:
+•	Q: Where is the fractional knapsack problem typically used in real-life scenarios?
+•	A: The fractional knapsack problem can be applied to scenarios where items can be divided, such as in logistics (e.g., transporting goods that can be split into portions), resource allocation (e.g., investments in projects), or any problem involving fractional usage of resources.
+7. Code Modification:
+•	Q: How would you modify the program to consider items in a different order or prioritize other attributes?
+•	A: To modify the program to consider different priorities, we could change the sorting logic. For example, we could prioritize by value, weight, or other attributes by adjusting the sorting comparator accordingly.
+________________________________________
+Additional Considerations for Practical Exam:
+•	Testing: You should be prepared to test the code with various inputs such as:
+o	All items having the same weight and value.
+o	The knapsack having 0 capacity.
+o	A case where the knapsack is large enough to hold all items.
+•	Edge Cases: Handle cases where:
+o	No items are provided.
+o	Items have 0 weight or 0 value.
+o	The capacity of the knapsack is 0.
+
+

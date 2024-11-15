@@ -1,0 +1,188 @@
+A(1)Write a program non-recursive and recursive program to calculate Fibonacci numbers and analyze their time and space complexity
+Java Code: 
+package com.daa;
+public class RecursiveNonRecursive {
+
+	// Non-Recursive Fibonacci Series
+	public void fibonacciNonRecursive(int n) {
+		int a = 0;
+		int b = 1;
+
+		for (int i = 0; i <= n; i++) 
+		{
+			System.out.print(a + " ");
+			int next = a + b;  // Calculate the next Fibonacci number
+			a = b;
+			b = next;
+		}
+		System.out.println();
+	}
+
+	// Recursive method to find the nth Fibonacci number
+	public int fibonacciRecursive(int n)
+	{
+		if (n == 0) // Base case 
+			return 0;
+		if (n == 1)
+			return 1;
+		return fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2);
+		// Recursive call to calculate Fibonacci(n) by summing Fibonacci(n-1) and Fibonacci(n-2)
+	}
+
+	// Method to print Fibonacci Series using recursion
+	public void FibonacciRecursive(int n) {
+		for (int i = 0; i <= n; i++) {
+			System.out.print(fibonacciRecursive(i) + " ");
+		}
+		System.out.println();
+	}
+
+	public static void main(String[] args) {
+		
+		int n = 10;
+		
+		RecursiveNonRecursive fibonacci = new RecursiveNonRecursive();
+                             System.out.println("Non-Recursive Fibonacci Series:");
+		fibonacci.fibonacciNonRecursive(n);
+
+		System.out.println("Recursive Fibonacci Series:");
+		fibonacci.FibonacciRecursive(n);
+	}
+}
+Explanation:
+Step-by-Step Time and Space Complexity
+Non-Recursive Fibonacci (Iterative):
+•	Time Complexity:
+o	The for loop runs n + 1 times, which is directly proportional to the input size n.
+o	Each iteration performs a constant amount of work (simple additions and assignments).
+o	Hence, the overall time complexity is O(n).
+•	Space Complexity:
+o	We only use a constant amount of memory (the variables a, b, and next).
+o	Therefore, the space complexity is O(1).
+Recursive Fibonacci:
+•	Time Complexity:
+o	The recursive algorithm calls itself twice for each function call (except for the base cases n == 0 and n == 1).
+o	This creates a tree-like structure of function calls, where each node branches into two recursive calls. The number of nodes in the recursion tree grows exponentially as 2^n.
+o	This leads to an overall time complexity of O(2^n).
+o	Example:
+	For fibonacci(5), the recursion looks like this:
+scss
+Copy code
+fibonacci(5)
+├── fibonacci(4)
+│   ├── fibonacci(3)
+│   │   ├── fibonacci(2)
+│   │   │   ├── fibonacci(1) (base case)
+│   │   │   └── fibonacci(0) (base case)
+│   │   └── fibonacci(1) (base case)
+│   └── fibonacci(2)
+│       ├── fibonacci(1) (base case)
+│       └── fibonacci(0) (base case)
+└── fibonacci(3)
+    ├── fibonacci(2)
+    │   ├── fibonacci(1) (base case)
+    │   └── fibonacci(0) (base case)
+    └── fibonacci(1) (base case)
+•	Space Complexity:
+o	The depth of the recursion tree is n because the function recursively calls itself with decreasing values of n until it reaches the base cases.
+o	The space used by the call stack is proportional to the recursion depth, which is n in the worst case.
+o	Hence, the space complexity is O(n).
+Questions:
+1. Explain the Fibonacci sequence. How does the Fibonacci series grow?
+Answer:
+•	The Fibonacci sequence is a series of numbers where each number is the sum of the two preceding ones, starting from 0 and 1. The sequence goes as follows:
+Copy code
+0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...
+•	Mathematically, the Fibonacci sequence is defined by the recurrence relation: F(n)=F(n−1)+F(n−2)F(n) = F(n-1) + F(n-2)F(n)=F(n−1)+F(n−2) with base cases: F(0)=0,F(1)=1F(0) = 0, F(1) = 1F(0)=0,F(1)=1
+•	The sequence grows exponentially as n increases, with each number being roughly 1.618 times the previous number, which is related to the Golden Ratio.
+________________________________________
+2. What is the difference between recursive and non-recursive approaches for calculating Fibonacci numbers?
+Answer:
+•	Recursive Approach:
+o	Concept: The recursive method calculates the Fibonacci number by calling itself for smaller values, breaking the problem down into subproblems.
+o	Advantages: Easy to implement and elegant, closely follows the mathematical definition of Fibonacci numbers.
+o	Disadvantages: Inefficient due to repeated calculations (e.g., fibonacci(2) is calculated multiple times). This results in exponential time complexity.
+o	Time Complexity: O(2^n) due to overlapping subproblems.
+o	Space Complexity: O(n) due to the recursion stack.
+•	Non-Recursive (Iterative) Approach:
+o	Concept: The non-recursive approach uses a loop to calculate Fibonacci numbers iteratively, avoiding the overhead of function calls.
+o	Advantages: More efficient than the recursive approach in terms of both time and space. No repeated calculations.
+o	Disadvantages: Requires more lines of code compared to the recursive approach, although it is more efficient.
+o	Time Complexity: O(n) due to a single loop from 0 to n.
+o	Space Complexity: O(1) as only a few variables are needed.
+________________________________________
+3. What is the time complexity of the recursive Fibonacci function? Explain in detail.
+Answer:
+•	The time complexity of the recursive Fibonacci function is O(2^n).
+•	Explanation: In the recursive version, every call to fibonacci(n) results in two recursive calls to fibonacci(n-1) and fibonacci(n-2). This leads to a binary tree of function calls.
+•	For example:
+scss
+Copy code
+fibonacci(5)
+├── fibonacci(4)
+│   ├── fibonacci(3)
+│   │   ├── fibonacci(2)
+│   │   └── fibonacci(1)
+│   └── fibonacci(2)
+└── fibonacci(3)
+o	This results in a large number of repeated calculations, with each Fibonacci value being computed multiple times. The number of function calls grows exponentially with the input size n.
+•	The number of calls is approximately 2^n, leading to O(2^n) time complexity.
+________________________________________
+4. What is the space complexity of the recursive Fibonacci function?
+Answer:
+•	The space complexity of the recursive Fibonacci function is O(n).
+•	Explanation: The space complexity in recursive algorithms is determined by the maximum depth of the recursion stack.
+•	In the case of Fibonacci, each recursive call adds a new frame to the stack, and the deepest recursive call occurs when the function is called with n = 1 or n = 0. Therefore, the maximum number of recursive calls (stack depth) is equal to n.
+•	Hence, the space complexity is O(n) due to the recursion stack.
+________________________________________
+5. How can the time complexity of the recursive Fibonacci function be optimized?
+Answer:
+•	The time complexity of the recursive Fibonacci function can be optimized using memoization or dynamic programming.
+•	Memoization: Involves storing the results of Fibonacci calculations for specific n values in an array or map, so that they are not recomputed when needed again.
+•	This reduces the number of redundant calculations, bringing the time complexity down to O(n).
+•	Dynamic Programming: Instead of using recursion, a bottom-up approach can be used where you compute the Fibonacci numbers iteratively, storing intermediate results in an array or two variables.
+•	The time complexity for both approaches becomes O(n) and the space complexity is O(n) for storing results (or O(1) if only two variables are used).
+________________________________________
+6. What is the space complexity of the non-recursive Fibonacci function?
+Answer:
+•	The space complexity of the non-recursive Fibonacci function is O(1).
+•	Explanation: The iterative Fibonacci function uses only a constant amount of extra space, as it only requires a few variables (a, b, and next) to hold intermediate values.
+•	There is no recursion stack or dynamic memory allocation based on the input size n, so the space complexity is constant.
+________________________________________
+7. How would you modify the recursive Fibonacci program to improve its efficiency?
+Answer:
+•	Memoization: Store previously computed Fibonacci numbers in an array or hash map so they are not recalculated. This ensures that each Fibonacci number is computed once, reducing the time complexity to O(n).
+•	Dynamic Programming: Use a bottom-up approach to iteratively calculate Fibonacci numbers up to n, starting from the base cases (F(0) and F(1)). This approach avoids recursion and improves both time and space efficiency.
+________________________________________
+8. What are the main advantages and disadvantages of recursive vs. non-recursive Fibonacci?
+Answer:
+•	Recursive Fibonacci:
+o	Advantages:
+	Easy to implement and understand.
+	Closely mirrors the mathematical definition of Fibonacci numbers.
+o	Disadvantages:
+	Inefficient for large n due to repeated calculations.
+	High time complexity (O(2^n)) and space complexity (O(n)).
+•	Non-Recursive Fibonacci:
+o	Advantages:
+	More efficient both in time (O(n)) and space (O(1)).
+	Suitable for large values of n.
+o	Disadvantages:
+	Slightly more complicated to implement compared to the recursive approach.
+________________________________________
+9. Write the Fibonacci sequence for n = 5 using both the recursive and non-recursive methods and compare the outputs.
+Answer:
+•	For n = 5, both the recursive and non-recursive methods should output:
+mathematica
+Copy code
+Fibonacci Series up to 5: 0 1 1 2 3 5
+•	However, the recursive method will compute the sequence via multiple recursive calls, while the non-recursive method will use a loop to calculate each Fibonacci number iteratively.
+________________________________________
+10. What are the potential applications of the Fibonacci sequence in real-world scenarios?
+Answer:
+•	Computer Science: Fibonacci numbers are used in algorithms such as the Fibonacci search algorithm and dynamic programming problems.
+•	Nature: Fibonacci numbers appear in various natural patterns, like the arrangement of leaves, flower petals, and the branching of trees.
+•	Financial Models: Fibonacci numbers are used in stock market analysis, particularly in technical analysis for trend prediction and cycle analysis.
+•	Cryptography: Fibonacci sequences are sometimes used in certain cryptographic algorithms.
+
+

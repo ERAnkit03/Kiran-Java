@@ -1,0 +1,77 @@
+A(5) Design n-Queens matrix having first Queen placed. Use backtracking to place remaining Queens to generate the final n-queen‘s matrix.
+
+Java Code:
+public class NQueens {
+
+    // Function to print the board
+    public void printBoard(int[][] board) {
+        for (int[] row : board) {
+            for (int cell : row) {
+                System.out.print(cell + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    // Function to check if a queen can be placed on board[row][col]
+    public boolean isSafe(int[][] board, int row, int col) {
+        for (int i = 0; i < row; i++) {
+            if (board[i][col] == 1 || (col - (row - i) >= 0 && board[i][col - (row - i)] == 1) 
+                || (col + (row - i) < board.length && board[i][col + (row - i)] == 1)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Recursive function to solve N Queens problem
+    public boolean solveNQueens(int[][] board, int row) {
+        if (row == board.length) {
+            printBoard(board);
+            return true;
+        }
+        for (int col = 0; col < board.length; col++) {
+            if (isSafe(board, row, col)) {
+                board[row][col] = 1;
+                if (solveNQueens(board, row + 1)) return true;
+                board[row][col] = 0;
+            }
+        }
+        return false;
+    }
+
+    public static void main(String[] args) {
+        int n = 8; // 8-Queens problem
+        NQueens nq = new NQueens();
+        int[][] board = new int[n][n];
+        board[0][0] = 1; // Place the first queen manually
+        nq.solveNQueens(board, 1); // Solve for remaining queens
+    }
+}
+
+Explanation:
+Possible Questions During Practical:
+1.	What is the N-Queens problem?
+o	The N-Queens problem asks to place n queens on an n x n chessboard such that no two queens threaten each other. That is, no two queens share the same row, column, or diagonal.
+2.	Why is backtracking used for solving the N-Queens problem?
+o	Backtracking is used because it is a trial-and-error method. It allows the algorithm to try placing queens in different positions and backtrack if a position is found to be invalid (i.e., if the queen placement leads to a conflict).
+3.	How does the isSafe function work?
+o	The isSafe function checks if it’s safe to place a queen at a specific position (row, col) by checking the column and both diagonals for any previous queens.
+4.	What happens when solveNQueens is called?
+o	The function tries placing a queen in each column of the given row. If placing the queen leads to a valid configuration, it proceeds to the next row. If a row is fully processed, it prints the board. If a solution is not found, it backtracks by removing the queen and tries the next column.
+5.	What changes would you make to print all solutions?
+o	Currently, the program prints only one solution. To print all solutions, you would modify the solveNQueens function to continue the loop even after finding a solution and avoid returning after printing.
+6.	What is the base case for the recursive function?
+o	The base case is when row == board.length, indicating that all queens have been placed successfully on the board.
+7.	How do you ensure that the first queen is placed in the first row?
+o	The first queen is manually placed at board[0][0] before invoking the backtracking process for the remaining queens.
+________________________________________
+Time Complexity:
+•	Worst-case Time Complexity: O(n!)
+o	The algorithm uses backtracking, which involves trying all possible placements of queens. In the worst case, the algorithm may have to try n! configurations.
+o	For each queen, there are n choices for placement in a row, and this recursive process branches out. Thus, the total number of possible configurations is factorial in nature.
+•	Best-case Time Complexity: O(n^2)
+o	In the best case, the algorithm quickly finds a solution (such as the first configuration being valid), and the function ends after just a few recursive calls.
+
+
